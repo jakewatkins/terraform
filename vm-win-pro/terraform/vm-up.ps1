@@ -6,9 +6,13 @@ Write-host "finished creating VM - waiting 60 before starting bootstrap process"
 start-sleep -seconds 60
 Write-Host "Configuring VM for Chef Bootstrap"
 
+
+#get password from the keyvault
+$secret = (ConvertFrom-Json -InputObject ((az keyvault secret show --name SprinterPassword --vault-name  kvGPSecrets) -join " ")).value
+
 #setup remote session
 $username = '.\sysadmin'
-$password = ConvertTo-SecureString -string 'P@ssw0rd1234!' -AsPlainText -Force
+$password = ConvertTo-SecureString -string $secret -AsPlainText -Force
 
 $credential = new-object -TypeName system.management.automation.pscredential -ArgumentList ($username, $password)
 

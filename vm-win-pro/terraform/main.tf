@@ -53,7 +53,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   location                 = azurerm_resource_group.rg.location
   size                     = "Standard_B4ms"
   admin_username           = var.username
-  admin_password           = var.password
+  admin_password           = data.azurerm_key_vault_secret.vmPassword.value
   enable_automatic_updates = true
 
   availability_set_id = azurerm_availability_set.DemoAset.id

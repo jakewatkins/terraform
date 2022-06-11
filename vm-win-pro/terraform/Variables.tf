@@ -23,8 +23,3 @@ variable "username" {
   default = "sysAdmin"
   description = "admin user name"
 }
-
-variable "password" {
-    default = "P@ssw0rd1234!"
-    description = "admin password - should change"  
-}
