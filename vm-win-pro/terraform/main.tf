@@ -22,7 +22,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   admin_password           = data.azurerm_key_vault_secret.vmPassword.value
   enable_automatic_updates = true
 
-  availability_set_id = azurerm_availability_set.DemoAset.id
+  availability_set_id = azurerm_availability_set.asetSprint.id
 
   network_interface_ids = [
     azurerm_network_interface.nicSprinter.id,
