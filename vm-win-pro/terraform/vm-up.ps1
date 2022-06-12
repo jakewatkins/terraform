@@ -1,7 +1,12 @@
+
+# get the local machine's ip address
+$workstationId = (Invoke-webrequest ifconfig.me/ip).Content.Trim()
+
+# do the terraform stuff
 Write-Host "running Terraform Plan"
-terraform plan
+terraform plan -var="workstation_ip=$workstationId"
 Write-Host "Running Terraform Apply"
-terraform apply -auto-approve
+terraform apply -var="workstation_ip=$workstationId" -auto-approve
 Write-host "finished creating VM - waiting 60 before starting bootstrap process"
 start-sleep -seconds 60
 Write-Host "Configuring VM for Chef Bootstrap"

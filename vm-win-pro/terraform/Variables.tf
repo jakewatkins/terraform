@@ -23,3 +23,8 @@ variable "username" {
   default = "sysAdmin"
   description = "admin user name"
 }
+
+variable "workstation_ip" {
+  type = string
+  description = "Ip address for the local workstation that will access the vm once it has been created"
+}

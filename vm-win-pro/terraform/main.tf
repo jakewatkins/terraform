@@ -1,49 +1,15 @@
 ## <https://www.terraform.io/docs/providers/azurerm/index.html>
 provider "azurerm" {
-  features {}
+  features {
+    resource_group {
+      prevent_deletion_if_contains_resources = false
+    }
+  }
 }
 
 
 locals {
   timestamp = "20220609"
-}
-
-## <https://www.terraform.io/docs/providers/azurerm/r/virtual_network.html>
-resource "azurerm_virtual_network" "vnet" {
-  name                = "vNet"
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-}
-
-## <https://www.terraform.io/docs/providers/azurerm/r/subnet.html> 
-resource "azurerm_subnet" "subnet" {
-  name                 = "internal"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.2.0/24"]
-}
-
-resource "azurerm_public_ip" "public_ip" {
-  name                = "vm_public_ip"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  domain_name_label   = "vm-jkw-ws-sprinter"
-  allocation_method   = "Dynamic"
-}
-
-## <https://www.terraform.io/docs/providers/azurerm/r/network_interface.html>
-resource "azurerm_network_interface" "example" {
-  name                = "example-nic"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.subnet.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.public_ip.id
-  }
 }
 
 ## <https://www.terraform.io/docs/providers/azurerm/r/windows_virtual_machine.html>
@@ -59,7 +25,7 @@ resource "azurerm_windows_virtual_machine" "example" {
   availability_set_id = azurerm_availability_set.DemoAset.id
 
   network_interface_ids = [
-    azurerm_network_interface.example.id,
+    azurerm_network_interface.nicSprinter.id,
   ]
 
   os_disk {
